@@ -13,11 +13,6 @@ const serverKeyPair = forge.pki.rsa.generateKeyPair({ bits: 2048 });
 const serverPublicKeyPem = forge.pki.publicKeyToPem(serverKeyPair.publicKey);
 const serverPrivateKeyPem = forge.pki.privateKeyToPem(serverKeyPair.privateKey);
 
-// Эндпоинт для получения публичного ключа
-app.get("/public-key", (req, res) => {
-  res.json({ publicKey: serverPublicKeyPem });
-});
-
 // Эндпоинт для верификации подписанного сообщения (сценарий 1)
 app.post("/verify-message", (req, res) => {
   const { message, signature, publicKey } = req.body;
@@ -52,7 +47,12 @@ app.post("/verify-message", (req, res) => {
   }
 });
 
-// Endpoint to generate and sign a random message (Scenario 2)
+// Эндпоинт для получения публичного ключа
+app.get("/public-key", (req, res) => {
+  res.json({ publicKey: serverPublicKeyPem });
+});
+
+//  Эндпоинт для генерации и подписи случайного сообщения (сценарий 2)
 app.get("/signed-message", (req, res) => {
   // Рандомное сообщение
   const message = "Random message from server: " + Math.random();
